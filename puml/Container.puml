@@ -1,0 +1,42 @@
+@startuml ContainerDiagram
+!include <C4/C4_Container>
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User", "Normal user.")
+
+System_Boundary(rep_pkg_b, "Replication Package Builder", "A platform to perform systematic literature review.") {
+    Container(web_app, "Web Application", "TBD", "Allows users to interact with the Replication Package Builder platform.")
+    Container(cli, "Command Line Interface (CLI)", "TBD", "Allows users to interact with the Replication Package Builder platform via command line.")
+    Container(api_service, "API Service", "TBD", "Handles requests from the web application and communicates with data sources.")
+    Container(database, "Database", "TBD", "Stores user data, query history, and metadata.")
+    Container(file_storage, "File Storage", "TBD", "Stores replication packages and related files.")
+}
+
+System_Boundary(data_sources, "Data Sources") {
+    System_Ext(scopus, "Scopus", "External database for scientific literature.")
+    System_Ext(ieeexplore, "IEEE Xplore", "External database for IEEE publications.")
+    System_Ext(engineeringvillage, "Engineering Village (Inspec)", "External database for engineering literature.")
+    System_Ext(sciencedirect, "Science Direct", "External database for Elsevier publications.")
+    System_Ext(halopenscience, "HAL Open Science", "External open access repository.")
+    System_Ext(acmdigitallibrary, "ACM Digital Library via Crossref", "External database for ACM publications.")
+    System_Ext(springernature, "Springer Nature", "External database for Springer publications.")
+}
+
+Rel(user, web_app, "Uses")
+Rel(user, cli, "Uses")
+Rel(web_app, api_service, "Makes API calls to")
+Rel(cli, api_service, "Makes API calls to")
+Rel_L(api_service, file_storage, "Stores and retrieves files")
+Rel(api_service, database, "Reads and writes data")
+Rel(api_service, scopus, "Queries literature from")
+Rel(api_service, ieeexplore, "Queries literature from")
+Rel(api_service, engineeringvillage, "Queries literature from")
+Rel(api_service, sciencedirect, "Queries literature from")
+Rel(api_service, halopenscience, "Queries literature from")
+Rel(api_service, acmdigitallibrary, "Queries literature from")
+Rel(api_service, springernature, "Queries literature from")
+
+' version functions used in e.g. footer
+footer drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml

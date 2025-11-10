@@ -1,0 +1,29 @@
+@startuml SystemContextDiagram
+!include <C4/C4_Context>
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User", "Normal user.")
+
+System(rep_pkg_b, "Replication Package Builder", "A platform to perform systematic literature review.")
+
+System_Ext(scopus, "Scopus", "External database for scientific literature.")
+System_Ext(ieeexplore, "IEEE Xplore", "External database for IEEE publications.")
+System_Ext(engineeringvillage, "Engineering Village (Inspec)", "External database for engineering literature.")
+System_Ext(sciencedirect, "Science Direct", "External database for Elsevier publications.")
+System_Ext(halopenscience, "HAL Open Science", "External open access repository.")
+System_Ext(acmdigitallibrary, "ACM Digital Library via Crossref", "External database for ACM publications.")
+System_Ext(springernature, "Springer Nature", "External database for Springer publications.")
+
+Rel(user, rep_pkg_b, "Uses")
+Rel(rep_pkg_b, scopus, "Queries literature from")
+Rel(rep_pkg_b, ieeexplore, "Queries literature from")
+Rel(rep_pkg_b, engineeringvillage, "Queries literature from")
+Rel(rep_pkg_b, sciencedirect, "Queries literature from")
+Rel(rep_pkg_b, halopenscience, "Queries literature from")
+Rel(rep_pkg_b, acmdigitallibrary, "Queries literature from")
+Rel(rep_pkg_b, springernature, "Queries literature from")
+
+' version functions used in e.g. footer
+footer drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml

@@ -1,0 +1,65 @@
+@startuml ComponentDiagram
+!include <C4/C4_Component>
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User", "Normal user.")
+
+System_Boundary(rep_pkg_b, "Replication Package Builder", "A platform to perform systematic literature review.") {
+    Container_Boundary(api_service, "API Service", "TBD") {
+        Component(request_handler, "Request Handler", "TBD", "Handles incoming API requests and routes them to appropriate services.")
+        Component(query_builder, "Query Builder", "TBD", "Creates queries based on user input and criteria.")
+        Component(query_executor, "Query Executor", "TBD", "Executes queries using specific adapters for each external service.")
+        Component(data_analyzer, "Data Analyzer", "TBD", "Processes retrieved data, builds word clouds, and performs analysis.")
+        Component(query_history, "Query History Manager", "TBD", "Manages storage and retrieval of previous queries and searches.")
+        Component(export_service, "Export Service", "TBD", "Handles exporting processed data and results to storage.")
+        Component(connection_manager, "Connection Manager", "TBD", "Manages connections to external data sources.")
+    }
+    Container(web_app, "Web Application", "TBD", "Allows users to interact with the Replication Package Builder platform.")
+    Container(cli, "Command Line Interface (CLI)", "TBD", "Allows users to interact with the Replication Package Builder platform via command line.")
+    Container(database, "Database", "TBD", "Stores user data, query history, and metadata.")
+    Container(file_storage, "File Storage", "TBD", "Stores replication packages and related files.")
+
+}
+System_Boundary(data_sources, "Data Sources") {
+    System_Ext(scopus, "Scopus", "External database for scientific literature.")
+    System_Ext(ieeexplore, "IEEE Xplore", "External database for IEEE publications.")
+    System_Ext(engineeringvillage, "Engineering Village (Inspec)", "External database for engineering literature.")
+    System_Ext(sciencedirect, "Science Direct", "External database for Elsevier publications.")
+    System_Ext(halopenscience, "HAL Open Science", "External open access repository.")
+    System_Ext(acmdigitallibrary, "ACM Digital Library via Crossref", "External database for ACM publications.")
+    System_Ext(springernature, "Springer Nature", "External database for Springer publications.")
+}
+Rel(user, web_app, "Uses")
+Rel(user, cli, "Uses")
+Rel(web_app, request_handler, "Makes API calls to")
+Rel(cli, request_handler, "Makes API calls to")
+
+Rel(request_handler, query_builder, "Routes requests to")
+Rel_L(request_handler, query_history, "Requests query history")
+Rel(request_handler, connection_manager, "Manages data source connections")
+
+Rel(query_builder, query_executor, "Provides queries to")
+Rel_L(query_executor, data_analyzer, "Sends retrieved data for analysis")
+Rel_R(query_executor, connection_manager, "Uses connection manager to access data sources")
+Rel_L(data_analyzer, export_service, "Sends processed data for export")
+
+Rel(query_builder, query_history, "Stores new queries")
+Rel(query_executor, query_history, "Stores execution results")
+
+Rel_U(query_history, database, "Stores/retrieves queries")
+Rel_L(query_history, file_storage, "Stores/retrieves query files")
+
+Rel(query_executor, scopus, "Executes queries on")
+Rel(query_executor, ieeexplore, "Executes queries on")
+Rel(query_executor, engineeringvillage, "Executes queries on")
+Rel(query_executor, sciencedirect, "Executes queries on")
+Rel(query_executor, halopenscience, "Executes queries on")
+Rel(query_executor, acmdigitallibrary, "Executes queries on")
+Rel(query_executor, springernature, "Executes queries on")
+
+Rel_L(export_service, file_storage, "Exports data to storage")
+
+' version functions used in e.g. footer
+footer drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml
